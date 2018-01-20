@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import SocketIOClient from 'socket.io-client';
 import './Canvas.css'
 
 class CanvasComponent extends Component {
@@ -21,6 +22,10 @@ class CanvasComponent extends Component {
         this.canvas = this.refs.canvas;
         this.ctx = this.canvas.getContext('2d');
         this.addEventListeners();
+        const socket = SocketIOClient("http://localhost:8080");
+        // socket.on("getCoordinates", () => {
+        //     console.log("Connected");
+        // })
     }
 
     componentWillUpdate() {

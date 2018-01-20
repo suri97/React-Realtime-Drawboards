@@ -1,25 +1,23 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const socketio = require("socket.io");
-const http = require("http");
-const server = http.createServer(app);
-const io = socketio(server);
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 //Body-Parser Middlware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/",function(req,res) {
-    res.send("Hello Hi");
-});
+//Cross Origin Resource Sharing
+let cors = require('cors');
+app.use(cors({credentials: true, origin: "*"}));
 
-io.on("connection", (socket) => {
-   console.log("Connected");
+io.on('connection', (socket) => {
+    console.log("Connected");
 });
 
 const port = 8080;
-app.listen(port, function() {
+server.listen(port, function() {
    console.log("Server listening at port 8080");
 });
 
