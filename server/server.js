@@ -14,6 +14,15 @@ app.use(cors({credentials: true, origin: "*"}));
 
 io.on('connection', (socket) => {
     console.log("Connected");
+    socket.on('mousedown', (data) => {
+        io.emit('mousedown',data);
+    });
+    socket.on('mousemove', (data) => {
+        io.emit('mousemove',data);
+    });
+    socket.on('mouseup', (data) => {
+        io.emit('mouseup',data);
+    });
 });
 
 const port = 8080;

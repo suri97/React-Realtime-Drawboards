@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import SocketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
 import './Canvas.css'
 
 class CanvasComponent extends Component {
@@ -16,16 +16,37 @@ class CanvasComponent extends Component {
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.socket = io('http://localhost:8080');
     }
 
     componentDidMount() {
         this.canvas = this.refs.canvas;
         this.ctx = this.canvas.getContext('2d');
         this.addEventListeners();
-        const socket = SocketIOClient("http://localhost:8080");
-        // socket.on("getCoordinates", () => {
-        //     console.log("Connected");
-        // })
+        this.socket.on('mousedown', (data) => {
+            this.setState({
+                prevX: data.prevX,
+                prevY: data.prevY,
+                currX: data.prevX,
+                currY: data.prevY
+            })
+        });
+        this.socket.on('mousemove', (data) => {
+            this.setState({
+                currX: data.currX,
+                currY: data.currY
+            });
+            this.setState({
+                prevY: data.currY,
+                prevX: data.currX
+            });
+        });
+        this.socket.on('mouseup', (data) => {
+            this.setState({
+                prevX: data.currX,
+                prevY: data.currY
+            });
+        });
     }
 
     componentWillUpdate() {
@@ -46,6 +67,7 @@ class CanvasComponent extends Component {
 
     onMouseDown(e) {
         e.preventDefault();
+        console.log("MouseDown");
         const canvas = this.canvas;
         let prevX = e.clientX - canvas.offsetLeft;
         let prevY = e.clientY - canvas.offsetTop;
@@ -56,6 +78,10 @@ class CanvasComponent extends Component {
             currY: prevY,
             drawing: true
         });
+        this.socket.emit('mousedown', {
+            prevX: prevX,
+            prevY: prevY
+        });
     }
 
     onMouseMove(e) {
@@ -64,6 +90,12 @@ class CanvasComponent extends Component {
         const canvas = this.canvas;
         let currX = e.clientX - canvas.offsetLeft;
         let currY = e.clientY - canvas.offsetTop;
+        this.socket.emit('mousemove', {
+            prevX: this.state.prevX,
+            prevY: this.state.prevY,
+            currX: currX,
+            currY: currY
+        });
         this.setState({
             currX: currX,
             currY: currY
@@ -76,6 +108,10 @@ class CanvasComponent extends Component {
 
     onMouseUp(e) {
         e.preventDefault();
+        this.socket.emit('mouseup', {
+            currX: this.state.currX,
+            currY: this.state.currY
+        });
         this.setState({
             drawing: false
         });
