@@ -12,6 +12,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 let cors = require('cors');
 app.use(cors({credentials: true, origin: "*"}));
 
+
+app.use(express.static('Client/build'));
+
 io.on('connection', (socket) => {
     console.log("Connected");
     socket.on('mousedown', (data) => {
