@@ -16,7 +16,7 @@ class CanvasComponent extends Component {
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
-        this.socket = io('https://react-drawboard.herokuapp.com:80');
+        this.socket = io('https://react-drawboard.herokuapp.com:443');
     }
 
     componentDidMount() {
