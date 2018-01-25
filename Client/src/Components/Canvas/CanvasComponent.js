@@ -16,7 +16,7 @@ class CanvasComponent extends Component {
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
-        this.socket = io(window.location.hostname);
+        this.socket = io(window.location.hostname + ':' + window.location.port);
     }
 
     componentDidMount() {
@@ -67,7 +67,6 @@ class CanvasComponent extends Component {
 
     onMouseDown(e) {
         e.preventDefault();
-        console.log("MouseDown");
         const canvas = this.canvas;
         let prevX = e.clientX - canvas.offsetLeft;
         let prevY = e.clientY - canvas.offsetTop;
