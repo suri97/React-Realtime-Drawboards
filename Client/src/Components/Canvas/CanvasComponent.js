@@ -16,6 +16,7 @@ class CanvasComponent extends Component {
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        //this.socket = io('localhost:8080');
         this.socket = io(window.location.hostname + ':' + window.location.port);
     }
 
