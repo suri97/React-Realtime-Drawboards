@@ -1,5 +1,4 @@
 .canvas {
     border: 1px solid #000000;
-    margin-left: 2em;
-    margin-top: 2em;
+    display: inline-flex;
 }

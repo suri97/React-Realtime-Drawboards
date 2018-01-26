@@ -4,14 +4,15 @@ import './Canvas.css'
 
 class CanvasComponent extends Component {
 
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             prevX: 0,
             prevY: 0,
             currX: 0,
             currY: 0,
-            drawing: false
+            drawing: false,
+            strokeColor: props.strokeColor
         };
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
@@ -30,13 +31,15 @@ class CanvasComponent extends Component {
                 prevY: data.prevY,
                 currX: data.prevX,
                 currY: data.prevY,
-                drawing: true
+                drawing: true,
+                strokeColor: data.strokeColor
             })
         });
         this.socket.on('mousemove', (data) => {
             this.setState({
                 currX: data.currX,
-                currY: data.currY
+                currY: data.currY,
+                strokeColor: data.strokeColor
             });
             this.setState({
                 prevY: data.currY,
@@ -47,7 +50,8 @@ class CanvasComponent extends Component {
             this.setState({
                 prevX: data.currX,
                 prevY: data.currY,
-                drawing: false
+                drawing: false,
+                strokeColor: data.strokeColor
             });
         });
     }
@@ -58,12 +62,12 @@ class CanvasComponent extends Component {
 
     updateCanvas() {
         const ctx = this.ctx;
-        const {prevX, prevY, currX, currY} = this.state;
+        const {prevX, prevY, currX, currY,strokeColor} = this.state;
         ctx.beginPath();
         ctx.moveTo(prevX,prevY);
         ctx.lineTo(currX,currY);
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = strokeColor;
         ctx.stroke();
         ctx.closePath();
     }
@@ -75,7 +79,8 @@ class CanvasComponent extends Component {
         let prevY = e.clientY - canvas.offsetTop;
         this.socket.emit('mousedown', {
             prevX: prevX,
-            prevY: prevY
+            prevY: prevY,
+            strokeColor: this.props.strokeColor
         });
     }
 
@@ -89,7 +94,8 @@ class CanvasComponent extends Component {
             prevX: this.state.prevX,
             prevY: this.state.prevY,
             currX: currX,
-            currY: currY
+            currY: currY,
+            strokeColor: this.props.strokeColor
         });
     }
 
@@ -97,7 +103,8 @@ class CanvasComponent extends Component {
         e.preventDefault();
         this.socket.emit('mouseup', {
             currX: this.state.currX,
-            currY: this.state.currY
+            currY: this.state.currY,
+            strokeColor: this.props.strokeColor
         });
     }
 
@@ -108,6 +115,7 @@ class CanvasComponent extends Component {
     }
 
     render() {
+        console.log(this.props.strokeColor);
         return (
             <canvas className="canvas"
                     ref = "canvas" width={500} height={500} />

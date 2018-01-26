@@ -4,6 +4,21 @@ import './App.css';
 import CanvasComponent from "./Components/Canvas/CanvasComponent";
 
 class App extends Component {
+
+    constructor(){
+        super();
+        this.state = {
+            strokeColor: '#000000'
+        };
+        this.onColorChange = this.onColorChange.bind(this);
+    }
+
+    onColorChange(e) {
+        this.setState({
+            strokeColor: e.target.value
+        })
+    }
+
   render() {
     return (
         <div>
@@ -13,7 +28,12 @@ class App extends Component {
           <h1 className="App-title">React Drawboard</h1>
         </header>
       </div>
-            <CanvasComponent/>
+            <div className={'container'} >
+                <span> <CanvasComponent
+                strokeColor = {this.state.strokeColor} /> </span>
+                <span> <input id = 'colorPicker' value={this.state.strokeColor}
+                              onChange={this.onColorChange} type={'color'}/> </span>
+            </div>
         </div>
     );
   }
