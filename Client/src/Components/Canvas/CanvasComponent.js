@@ -29,7 +29,8 @@ class CanvasComponent extends Component {
                 prevX: data.prevX,
                 prevY: data.prevY,
                 currX: data.prevX,
-                currY: data.prevY
+                currY: data.prevY,
+                drawing: true
             })
         });
         this.socket.on('mousemove', (data) => {
@@ -45,7 +46,8 @@ class CanvasComponent extends Component {
         this.socket.on('mouseup', (data) => {
             this.setState({
                 prevX: data.currX,
-                prevY: data.currY
+                prevY: data.currY,
+                drawing: false
             });
         });
     }
@@ -71,13 +73,6 @@ class CanvasComponent extends Component {
         const canvas = this.canvas;
         let prevX = e.clientX - canvas.offsetLeft;
         let prevY = e.clientY - canvas.offsetTop;
-        this.setState({
-            prevX: prevX,
-            prevY: prevY,
-            currX: prevX,
-            currY: prevY,
-            drawing: true
-        });
         this.socket.emit('mousedown', {
             prevX: prevX,
             prevY: prevY
@@ -96,14 +91,6 @@ class CanvasComponent extends Component {
             currX: currX,
             currY: currY
         });
-        this.setState({
-            currX: currX,
-            currY: currY
-        });
-        this.setState({
-            prevX: currX,
-            prevY: currY
-        })
     }
 
     onMouseUp(e) {
@@ -111,9 +98,6 @@ class CanvasComponent extends Component {
         this.socket.emit('mouseup', {
             currX: this.state.currX,
             currY: this.state.currY
-        });
-        this.setState({
-            drawing: false
         });
     }
 
