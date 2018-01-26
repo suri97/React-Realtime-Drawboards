@@ -1,4 +1,5 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import ReactDom from 'react-dom';
 import io from 'socket.io-client';
 import './Canvas.css'
 
@@ -73,7 +74,8 @@ class CanvasComponent extends Component {
     }
 
     onMouseDown(e) {
-        e.preventDefault();
+        if ( !ReactDom.findDOMNode(this).contains(e.target) ) { return; }
+            e.preventDefault();
         const canvas = this.canvas;
         let prevX = e.clientX - canvas.offsetLeft;
         let prevY = e.clientY - canvas.offsetTop;
@@ -115,7 +117,6 @@ class CanvasComponent extends Component {
     }
 
     render() {
-        console.log(this.props.strokeColor);
         return (
             <canvas className="canvas"
                     ref = "canvas" width={500} height={500} />
